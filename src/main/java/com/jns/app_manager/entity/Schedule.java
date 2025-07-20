@@ -6,17 +6,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.With;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @With
 @Entity(name = "schedules")
-public class Schedule {
+public class Schedule extends Audit{
 
     @Id
     @Column(length = 36, columnDefinition = "VARCHAR(36)")

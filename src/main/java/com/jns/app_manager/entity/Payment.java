@@ -4,6 +4,7 @@ import com.jns.app_manager.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.With;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -11,11 +12,12 @@ import org.hibernate.type.SqlTypes;
 import java.time.LocalDate;
 import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @With
 @Entity(name = "payments")
-public class Payment {
+public class Payment extends Audit{
     @Id
     @Column(length = 36, columnDefinition = "VARCHAR(36)")
     @JdbcTypeCode(SqlTypes.VARCHAR)

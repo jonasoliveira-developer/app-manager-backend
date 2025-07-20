@@ -1,9 +1,11 @@
 package com.jns.app_manager.entity;
 
+import com.jns.app_manager.enums.AccessLevel;
 import com.jns.app_manager.enums.AccountStatus;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.With;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -11,11 +13,12 @@ import org.hibernate.type.SqlTypes;
 import java.util.List;
 import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @With
 @Entity(name = "clients")
-public class Client {
+public class Client extends Audit{
     @Id
     @Column(length = 36, columnDefinition = "VARCHAR(36)")
     @JdbcTypeCode(SqlTypes.VARCHAR)
@@ -33,6 +36,10 @@ public class Client {
 
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private AccessLevel accessLevel = AccessLevel.CLIENT;
 
     private String ImageProfile;
 
