@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_DATABASE: app_manager_db
+      MYSQL_USER: app_manager
+      MYSQL_PASSWORD: app_manager
+      MYSQL_ROOT_PASSWORD: app_manager
+    ports:
+      - "3306:3306"
+
+    networks:
+      - app_manager
+volumes:
+  db-data:
+
+networks:
+  app_manager:

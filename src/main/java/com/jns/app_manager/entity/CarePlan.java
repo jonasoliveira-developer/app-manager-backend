@@ -1,28 +1,26 @@
-package com.jns.app_manager.domain;
+package com.jns.app_manager.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.With;
-import org.hibernate.annotations.UuidGenerator;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-@Entity
+
 @Data
 @Builder
 @With
+@Entity(name = "care_plans")
 public class CarePlan {
     @Id
-    @UuidGenerator
+    @Column(length = 36, columnDefinition = "VARCHAR(36)")
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID id;
-
 
     @ManyToOne
     private User user;
@@ -30,7 +28,8 @@ public class CarePlan {
     @ManyToOne
     private Client client;
 
-    private List<Scheduled> schedule;
+    @OneToMany(mappedBy = "carePlan", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Schedule> schedule;
 
     @OneToOne(mappedBy = "carePlan")
     private Payment payment;
