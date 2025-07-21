@@ -3,10 +3,7 @@ package com.jns.app_manager.entity;
 import com.jns.app_manager.enums.AccessLevel;
 import com.jns.app_manager.enums.AccountStatus;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.With;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -16,8 +13,8 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
-@With
-@Entity(name = "users")
+@Table(name = "users")
+@Entity
 public class User extends Audit {
     @Id
     @Column(length = 36, columnDefinition = "VARCHAR(36)")
@@ -34,11 +31,10 @@ public class User extends Audit {
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
 
-    @Builder.Default
     @Enumerated(EnumType.STRING)
     private AccessLevel accessLevel = AccessLevel.USER;
 
-    private String ImageProfile;
+    private String imageProfile;
 
     @OneToMany(mappedBy = "user")
     private List<Client> clients;

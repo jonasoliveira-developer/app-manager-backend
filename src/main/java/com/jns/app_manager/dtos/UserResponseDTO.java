@@ -12,7 +12,5 @@ public record UserResponseDTO(
         String phoneNumber,
         String councilRegistrationNumber,
         String subscriptionType,
-        AccountStatus accountStatus,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        AccountStatus accountStatus
 ) {}
