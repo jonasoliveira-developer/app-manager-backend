@@ -11,7 +11,5 @@ public record ClientResponseDTO(
         String age,
         String weight,
         String height,
-        String local,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        String local
 ) {}

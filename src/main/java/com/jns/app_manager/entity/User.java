@@ -2,6 +2,7 @@ package com.jns.app_manager.entity;
 
 import com.jns.app_manager.enums.AccessLevel;
 import com.jns.app_manager.enums.AccountStatus;
+import com.jns.app_manager.enums.SubscriptionType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -13,10 +14,13 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 @Entity
 public class User extends Audit {
     @Id
+    @GeneratedValue
     @Column(length = 36, columnDefinition = "VARCHAR(36)")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID id;
@@ -26,7 +30,9 @@ public class User extends Audit {
     private String password;
     private String phoneNumber;
     private String councilRegistrationNumber;
-    private String subscriptionType;
+
+    @Enumerated(EnumType.STRING)
+    private SubscriptionType subscriptionType;
 
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;

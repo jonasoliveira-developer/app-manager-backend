@@ -3,6 +3,7 @@ package com.jns.app_manager.dtos.mapper;
 import com.jns.app_manager.dtos.UserRequestDTO;
 import com.jns.app_manager.dtos.UserResponseDTO;
 import com.jns.app_manager.entity.User;
+import com.jns.app_manager.enums.SubscriptionType;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,7 +16,7 @@ public  class UserMapper  {
                 user.getEmail(),
                 user.getPhoneNumber(),
                 user.getCouncilRegistrationNumber(),
-                user.getSubscriptionType(),
+                user.getSubscriptionType().name(),
                 user.getAccountStatus()
         );
     }
@@ -27,7 +28,7 @@ public  class UserMapper  {
                 .password(dto.password())
                 .phoneNumber(dto.phoneNumber())
                 .councilRegistrationNumber(dto.councilRegistrationNumber())
-                .subscriptionType(dto.subscriptionType())
+                .subscriptionType(SubscriptionType.valueOf(dto.subscriptionType()))
                 .imageProfile(dto.imageProfile())
                 .build();
     }

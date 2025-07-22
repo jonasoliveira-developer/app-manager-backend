@@ -6,7 +6,7 @@ CREATE TABLE users (
     password VARCHAR(100) NOT NULL,
     phone_number VARCHAR(20),
     council_registration_number VARCHAR(50),
-    subscription_type VARCHAR(50),
+    subscription_type VARCHAR(50) NOT NULL CHECK (subscription_type IN ('FREE','BASIC','PREMIUM','TEST')),
     account_status VARCHAR(20) NOT NULL CHECK (account_status IN ('ACTIVE', 'INACTIVE', 'BLOCKED', 'DELETED')),
     access_level VARCHAR(20) NOT NULL CHECK (access_level IN ( 'ROOT','ADMINISTRATOR','USER','CLIENT')),
     image_profile VARCHAR(255),

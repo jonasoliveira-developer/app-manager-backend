@@ -5,6 +5,7 @@ import com.jns.app_manager.dtos.UserResponseDTO;
 import com.jns.app_manager.dtos.mapper.UserMapper;
 import com.jns.app_manager.enums.AccessLevel;
 import com.jns.app_manager.enums.AccountStatus;
+import com.jns.app_manager.enums.SubscriptionType;
 import com.jns.app_manager.exceptions.ObjectNotFoundException;
 import com.jns.app_manager.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,12 +41,9 @@ public class UserService {
                 .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
         user.setName(dto.name());
-        user.setEmail(dto.email());
-        user.setPassword(dto.password());
         user.setPhoneNumber(dto.phoneNumber());
         user.setCouncilRegistrationNumber(dto.councilRegistrationNumber());
-        user.setSubscriptionType(dto.subscriptionType());
-        user.setImageProfile(dto.imageProfile());
+        user.setSubscriptionType(SubscriptionType.valueOf(dto.subscriptionType()));
 
         return mapper.toResponse(userRepository.save(user));
     }
