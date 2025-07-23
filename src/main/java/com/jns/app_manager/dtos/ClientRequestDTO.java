@@ -1,5 +1,7 @@
 package com.jns.app_manager.dtos;
 
+import java.util.UUID;
+
 public record ClientRequestDTO(
         String name,
         String email,
@@ -9,5 +11,6 @@ public record ClientRequestDTO(
         String weight,
         String height,
         String local,
-        String imageProfile
+        String imageProfile,
+        UUID userId
 ) {}

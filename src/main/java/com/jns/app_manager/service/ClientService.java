@@ -3,8 +3,10 @@ package com.jns.app_manager.service;
 import com.jns.app_manager.dtos.ClientRequestDTO;
 import com.jns.app_manager.dtos.ClientResponseDTO;
 import com.jns.app_manager.dtos.mapper.ClientMapper;
+import com.jns.app_manager.enums.AccountStatus;
 import com.jns.app_manager.exceptions.ObjectNotFoundException;
 import com.jns.app_manager.repository.ClientRepository;
+import com.jns.app_manager.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.UUID;
 public class ClientService {
 
     private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
     private final ClientMapper mapper;
 
     public ClientResponseDTO findById(UUID id) {
@@ -33,7 +36,11 @@ public class ClientService {
     }
 
     public ClientResponseDTO save(ClientRequestDTO dto) {
+        var user = userRepository.findById(dto.userId())
+                .orElseThrow(() -> new ObjectNotFoundException("User not found"));
+
         var client = mapper.toEntity(dto);
+        client.setUser(user);
         return mapper.toResponse(clientRepository.save(client));
     }
 
@@ -42,8 +49,6 @@ public class ClientService {
                 .orElseThrow(() -> new ObjectNotFoundException("Client not found"));
 
         client.setName(dto.name());
-        client.setEmail(dto.email());
-        client.setPassword(dto.password());
         client.setPhoneNumber(dto.phoneNumber());
         client.setAge(dto.age());
         client.setWeight(dto.weight());
@@ -57,7 +62,7 @@ public class ClientService {
     public void delete(UUID id) {
         var client = clientRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Client not found"));
-
-        clientRepository.delete(client);
+            client.setAccountStatus(AccountStatus.DELETED);
+        clientRepository.save(client);
     }
 }

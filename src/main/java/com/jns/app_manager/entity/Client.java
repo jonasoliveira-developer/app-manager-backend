@@ -16,9 +16,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @With
-@Entity(name = "clients")
+@Table(name = "clients")
+@Entity
 public class Client extends Audit{
     @Id
+    @GeneratedValue
     @Column(length = 36, columnDefinition = "VARCHAR(36)")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID id;
