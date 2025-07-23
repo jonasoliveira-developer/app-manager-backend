@@ -38,7 +38,7 @@ public class User extends Audit {
     private AccountStatus accountStatus;
 
     @Enumerated(EnumType.STRING)
-    private AccessLevel accessLevel = AccessLevel.USER;
+    private AccessLevel accessLevel;
 
     private String imageProfile;
 

@@ -2,7 +2,7 @@ package com.jns.app_manager.dtos;
 
 import com.jns.app_manager.enums.AccountStatus;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public record UserResponseDTO(

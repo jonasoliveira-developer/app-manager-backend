@@ -8,9 +8,6 @@ import com.jns.app_manager.enums.AccountStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 @Component
 @RequiredArgsConstructor
 public class ClientMapper {
@@ -39,7 +36,10 @@ public class ClientMapper {
                 client.getAge(),
                 client.getWeight(),
                 client.getHeight(),
-                client.getLocal()
+                client.getLocal(),
+                client.getAccountStatus(),
+                client.getImageProfile(),
+                client.getUser().getId()
         );
     }
 }

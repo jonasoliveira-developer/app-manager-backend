@@ -4,10 +4,13 @@ import com.jns.app_manager.dtos.UserRequestDTO;
 import com.jns.app_manager.dtos.UserResponseDTO;
 import com.jns.app_manager.entity.User;
 import com.jns.app_manager.enums.SubscriptionType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public  class UserMapper  {
+    private final ClientMapper clientMapper;
 
     public  UserResponseDTO toResponse(User user) {
         return new UserResponseDTO(
@@ -18,6 +21,7 @@ public  class UserMapper  {
                 user.getCouncilRegistrationNumber(),
                 user.getSubscriptionType().name(),
                 user.getAccountStatus()
+
         );
     }
 

@@ -37,13 +37,16 @@ CREATE TABLE care_plans (
     id VARCHAR(16) PRIMARY KEY,
     user_id VARCHAR(36),
     client_id VARCHAR(36),
+    payment_id VARCHAR(16),
     start_date DATE NOT NULL,
     expected_end_date DATE,
     actual_end_date DATE,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (client_id) REFERENCES clients(id)
+    FOREIGN KEY (client_id) REFERENCES clients(id),
+    FOREIGN KEY (payment_id) REFERENCES payments(id) -- nova relação com payments
 );
 
 CREATE TABLE schedules (

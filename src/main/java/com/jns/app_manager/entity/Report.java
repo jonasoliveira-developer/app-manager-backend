@@ -1,9 +1,6 @@
 package com.jns.app_manager.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,6 +18,7 @@ import java.util.UUID;
 @Entity(name = "reports")
 public class Report extends Audit{
     @Id
+    @GeneratedValue
     @Column(length = 36, columnDefinition = "VARCHAR(36)")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID id;
