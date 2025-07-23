@@ -19,6 +19,7 @@ import java.util.UUID;
 @Entity(name = "payments")
 public class Payment extends Audit{
     @Id
+    @GeneratedValue
     @Column(length = 36, columnDefinition = "VARCHAR(36)")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID id;

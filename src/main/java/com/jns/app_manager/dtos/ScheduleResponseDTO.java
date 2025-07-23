@@ -7,7 +7,5 @@ public record ScheduleResponseDTO(
         UUID id,
         String dayOfWeek,
         String sessionTime,
-        UUID carePlanId,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        UUID carePlanId
 ) {}

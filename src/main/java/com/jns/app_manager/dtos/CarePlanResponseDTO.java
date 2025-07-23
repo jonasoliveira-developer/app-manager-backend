@@ -13,7 +13,5 @@ public record CarePlanResponseDTO(
         LocalDate expectedEndDate,
         LocalDate actualEndDate,
         UUID paymentId,
-        List<ScheduleResponseDTO> schedule,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        List<ScheduleResponseDTO> schedule
 ) {}

@@ -20,6 +20,8 @@ import java.util.UUID;
 @Entity(name = "care_plans")
 public class CarePlan extends Audit{
     @Id
+    @GeneratedValue
+
     @Column(length = 36, columnDefinition = "VARCHAR(36)")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID id;
