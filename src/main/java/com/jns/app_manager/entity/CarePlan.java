@@ -1,10 +1,8 @@
 package com.jns.app_manager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.With;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -16,6 +14,8 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @With
 @Entity(name = "care_plans")
 public class CarePlan extends Audit{
@@ -27,15 +27,17 @@ public class CarePlan extends Audit{
     private UUID id;
 
     @ManyToOne
+    @JsonIgnore
     private User user;
 
     @ManyToOne
+    @JsonIgnore
     private Client client;
 
-    @OneToMany(mappedBy = "carePlan", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "carePlan" , fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedule;
 
-    @OneToOne(mappedBy = "carePlan")
+    @OneToOne(mappedBy = "carePlan", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Payment payment;
 
     private LocalDate startDate;

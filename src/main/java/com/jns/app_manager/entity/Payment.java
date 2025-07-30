@@ -1,11 +1,9 @@
 package com.jns.app_manager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jns.app_manager.enums.PaymentStatus;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.With;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -15,6 +13,8 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @With
 @Entity(name = "payments")
 public class Payment extends Audit{
@@ -31,7 +31,7 @@ public class Payment extends Audit{
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private CarePlan carePlan;
 }
 

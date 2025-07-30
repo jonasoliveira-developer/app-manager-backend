@@ -10,7 +10,5 @@ public record ReportResponseDTO(
         LocalDate date,
         String text,
         UUID clientId,
-        UUID userId,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        UUID userId
 ) {}

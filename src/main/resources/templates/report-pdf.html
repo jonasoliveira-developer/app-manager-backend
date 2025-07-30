@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        @page {
+            size: A4;
+            margin: 50px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12pt;
+            margin: 0;
+        }
+        .title {
+            text-align: center;
+            font-size: 24pt;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 15px;
+        }
+        .section strong {
+            font-size: 14pt;
+            font-weight: bold;
+        }
+        .section span {
+            font-size: 14pt;
+        }
+        .report-text {
+            margin-top: 10px;
+            text-align: justify;
+            font-size: 12pt;
+        }
+        .signature {
+            margin-top: 80px;
+            text-align: center;
+            font-size: 12pt;
+        }
+        .line {
+            border-top: 1px solid #000;
+            width: 250px;
+            margin: 10px auto;
+        }
+    </style>
+</head>
+<body>
+<div class="title">Relatório Clínico</div>
+
+<div class="section">
+    <strong>Registro Profissional:</strong> <span th:text="${report.councilRegistrationNumber}"></span>
+</div>
+<div class="section">
+    <strong>Data:</strong> <span th:text="${report.date}"></span>
+</div>
+<div class="section">
+    <strong>Paciente:</strong> <span th:text="${report.clientName}"></span>
+</div>
+<div class="section">
+    <strong>Profissional:</strong> <span th:text="${report.userName}"></span>
+</div>
+<div class="section report-text">
+    <strong>Relatório:</strong>
+    <p th:text="${report.text}"></p>
+</div>
+
+<div class="signature">
+    <div class="line"></div>
+    <div><span th:text="${report.userName}"></span></div>
+    <div><small th:text="'CRN: ' + ${report.councilRegistrationNumber}"></small></div>
+</div>
+</body>
+</html>

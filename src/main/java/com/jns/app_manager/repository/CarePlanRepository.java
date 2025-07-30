@@ -9,6 +9,6 @@ import java.util.UUID;
 
 @Repository
 public interface CarePlanRepository extends JpaRepository<CarePlan, UUID> {
-    List<CarePlan> findAllByUserId(UUID userId);
-    List<CarePlan> findAllByClientId(UUID clientId);
+    List<CarePlan> findAllByUserId(UUID id);
+    List<CarePlan> findAllByClientId(UUID id);
 }

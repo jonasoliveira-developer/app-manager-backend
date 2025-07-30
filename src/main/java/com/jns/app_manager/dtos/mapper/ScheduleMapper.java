@@ -1,6 +1,8 @@
 package com.jns.app_manager.dtos.mapper;
 
+import com.jns.app_manager.dtos.ScheduleRequestDTO;
 import com.jns.app_manager.dtos.ScheduleResponseDTO;
+import com.jns.app_manager.entity.CarePlan;
 import com.jns.app_manager.entity.Schedule;
 import org.springframework.stereotype.Component;
 
@@ -14,5 +16,13 @@ public class ScheduleMapper {
                 schedule.getSessionTime(),
                 schedule.getCarePlan().getId()
         );
+    }
+
+    public Schedule toEntity(ScheduleRequestDTO dto, CarePlan carePlan) {
+        return Schedule.builder()
+                .dayOfWeek(dto.dayOfWeek())
+                .sessionTime(dto.sessionTime())
+                .carePlan(carePlan)
+                .build();
     }
 }

@@ -34,10 +34,9 @@ CREATE TABLE clients (
 );
 
 CREATE TABLE care_plans (
-    id VARCHAR(16) PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     user_id VARCHAR(36),
     client_id VARCHAR(36),
-    payment_id VARCHAR(16),
     start_date DATE NOT NULL,
     expected_end_date DATE,
     actual_end_date DATE,
@@ -45,22 +44,22 @@ CREATE TABLE care_plans (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (client_id) REFERENCES clients(id),
-    FOREIGN KEY (payment_id) REFERENCES payments(id) -- nova relação com payments
+    FOREIGN KEY (client_id) REFERENCES clients(id)
 );
 
 CREATE TABLE schedules (
-     id VARCHAR(16) PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     day_of_week VARCHAR(20) NOT NULL,
-    session_time VARCHAR(20) NOT NULL,
-    care_plan_id VARCHAR(36),
+    session_time VARCHAR(10) NOT NULL,
+    care_plan_id VARCHAR(36) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
     FOREIGN KEY (care_plan_id) REFERENCES care_plans(id)
 );
 
 CREATE TABLE payments (
-    id VARCHAR(16) PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     opened_date DATE NOT NULL,
     closed_date DATE,
     payment_status VARCHAR(20) CHECK ( payment_status IN ('OPEN', 'CLOSED', 'LATE')),

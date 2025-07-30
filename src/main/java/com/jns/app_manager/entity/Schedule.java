@@ -1,10 +1,8 @@
 package com.jns.app_manager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.With;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -13,10 +11,11 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
-@With
-@Entity(name = "schedules")
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "schedules")
+@Entity
 public class Schedule extends Audit{
-
     @Id
     @GeneratedValue
     @Column(length = 36, columnDefinition = "VARCHAR(36)")
@@ -27,6 +26,7 @@ public class Schedule extends Audit{
     private String sessionTime;
 
     @ManyToOne
+    @JsonIgnore
     private CarePlan carePlan;
 
 }
