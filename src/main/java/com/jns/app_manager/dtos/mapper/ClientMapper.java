@@ -22,7 +22,7 @@ public class ClientMapper {
                 .weight(dto.weight())
                 .height(dto.height())
                 .local(dto.local())
-                .ImageProfile(dto.imageProfile())
+                .imageProfile(dto.imageProfile())
                 .accountStatus(AccountStatus.ACTIVE)
                 .build();
     }

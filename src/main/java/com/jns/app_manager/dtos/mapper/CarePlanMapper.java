@@ -15,6 +15,7 @@ public class CarePlanMapper {
 
     public CarePlanResponseDTO toResponse(CarePlan plan) {
         return new CarePlanResponseDTO(
+                plan.getTitle(),
                 plan.getId(),
                 plan.getUser().getId(),
                 plan.getClient().getId(),
@@ -29,6 +30,7 @@ public class CarePlanMapper {
 
     public CarePlan toEntity(CarePlanRequestDTO dto, User user, Client client, Payment payment) {
         return CarePlan.builder()
+                .title(dto.title())
                 .user(user)
                 .client(client)
                 .payment(payment)

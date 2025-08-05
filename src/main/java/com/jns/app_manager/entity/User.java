@@ -5,6 +5,7 @@ import com.jns.app_manager.enums.AccountStatus;
 import com.jns.app_manager.enums.SubscriptionType;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -13,34 +14,17 @@ import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
 @Entity
-public class User extends Audit {
-    @Id
-    @GeneratedValue
-    @Column(length = 36, columnDefinition = "VARCHAR(36)")
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    private UUID id;
+public class User extends Person {
 
-    private String name;
-    private String email;
-    private String password;
-    private String phoneNumber;
-    private String councilRegistrationNumber;
+    String councilRegistrationNumber;
 
     @Enumerated(EnumType.STRING)
     private SubscriptionType subscriptionType;
-
-    @Enumerated(EnumType.STRING)
-    private AccountStatus accountStatus;
-
-    @Enumerated(EnumType.STRING)
-    private AccessLevel accessLevel;
-
-    private String imageProfile;
 
     @OneToMany(mappedBy = "user")
     private List<Client> clients;

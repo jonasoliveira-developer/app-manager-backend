@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public record CarePlanResponseDTO(
+        String title,
         UUID id,
         UUID userId,
         UUID clientId,

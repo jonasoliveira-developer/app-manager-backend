@@ -6,7 +6,9 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public record PaymentRequestDTO(
+        String title,
         LocalDate openedDate,
         PaymentStatus paymentStatus,
-        UUID carePlanId
+        UUID carePlanId,
+        UUID clientId
 ) {}

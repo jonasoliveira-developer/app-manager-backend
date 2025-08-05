@@ -6,6 +6,8 @@ import com.jns.app_manager.service.ReportPdfService;
 import com.jns.app_manager.service.ReportService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,9 +33,12 @@ public class ReportController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReportResponseDTO>> findAll() {
-        var response = reportService.findAll();
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Page<ReportResponseDTO>> getReportsByClientAndTitle(
+            @RequestParam UUID clientId,
+            @RequestParam(required = false) String title,
+            Pageable pageable) {
+        Page<ReportResponseDTO> page = reportService.findAllByClientIdAndTitle(clientId, title, pageable);
+        return ResponseEntity.ok(page);
     }
 
     @PostMapping

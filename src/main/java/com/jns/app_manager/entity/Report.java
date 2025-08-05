@@ -22,6 +22,8 @@ public class Report extends Audit{
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID id;
 
+    private String title;
+
     private String councilRegistrationNumber;
     private LocalDate date;
 
