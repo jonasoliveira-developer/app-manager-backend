@@ -12,6 +12,7 @@ public class ReportMapper {
 
     public Report toEntity(ReportRequestDTO dto, Client client, User user) {
         return Report.builder()
+                .title(dto.title())
                 .councilRegistrationNumber(dto.councilRegistrationNumber())
                 .date(dto.date())
                 .text(dto.text())
@@ -23,6 +24,7 @@ public class ReportMapper {
     public ReportResponseDTO toResponse(Report report) {
         return new ReportResponseDTO(
                 report.getId(),
+                report.getTitle(),
                 report.getCouncilRegistrationNumber(),
                 report.getDate(),
                 report.getText(),

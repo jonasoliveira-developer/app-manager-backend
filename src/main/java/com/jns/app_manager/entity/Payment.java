@@ -24,6 +24,7 @@ public class Payment extends Audit{
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID id;
 
+    private String title;
 
     private LocalDate openedDate;
     private LocalDate closedDate;
@@ -33,6 +34,10 @@ public class Payment extends Audit{
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private CarePlan carePlan;
+
+    @ManyToOne
+    @JsonIgnore
+    private Client client;
 }
 
 

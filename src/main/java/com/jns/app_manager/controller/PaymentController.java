@@ -5,6 +5,8 @@ import com.jns.app_manager.dtos.PaymentResponseDTO;
 import com.jns.app_manager.service.PaymentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +28,12 @@ public class PaymentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PaymentResponseDTO>> findAll() {
-        var response = paymentService.findAll();
+    public ResponseEntity<Page<PaymentResponseDTO>> findAllByClientIdAndTitle(
+            @RequestParam UUID clientId,
+            @RequestParam(required = false, defaultValue = "") String title,
+            Pageable pageable) {
+
+        var response = paymentService.findAllByClientIdAndTitle(clientId, title, pageable);
         return ResponseEntity.ok(response);
     }
 

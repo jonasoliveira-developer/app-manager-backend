@@ -7,8 +7,10 @@ import java.util.UUID;
 
 public record PaymentResponseDTO(
         UUID id,
+        String title,
         LocalDate openedDate,
         LocalDate closedDate,
         PaymentStatus paymentStatus,
-        UUID carePlanId
+        UUID carePlanId,
+        UUID clientId
 ) {}

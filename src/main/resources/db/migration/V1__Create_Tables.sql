@@ -35,6 +35,7 @@ CREATE TABLE clients (
 
 CREATE TABLE care_plans (
     id VARCHAR(36) PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
     user_id VARCHAR(36),
     client_id VARCHAR(36),
     start_date DATE NOT NULL,
@@ -60,24 +61,28 @@ CREATE TABLE schedules (
 
 CREATE TABLE payments (
     id VARCHAR(36) PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
     opened_date DATE NOT NULL,
     closed_date DATE,
     payment_status VARCHAR(20) CHECK ( payment_status IN ('OPEN', 'CLOSED', 'LATE')),
     care_plan_id VARCHAR(36),
+    client_id VARCHAR(36),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (care_plan_id) REFERENCES care_plans(id)
+    FOREIGN KEY (care_plan_id) REFERENCES care_plans(id),
+    FOREIGN KEY (client_id) REFERENCES clients(id)
 );
 
 CREATE TABLE reports (
     id VARCHAR(36) PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
     council_registration_number VARCHAR(100),
     date DATE NOT NULL,
     text TEXT,
     user_id VARCHAR(36),
     client_id VARCHAR(36),
-     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (client_id) REFERENCES clients(id)
 );
