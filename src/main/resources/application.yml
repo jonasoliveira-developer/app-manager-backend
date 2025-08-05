@@ -23,7 +23,7 @@ spring:
     baseline-on-migrate: true
 
 server:
-  port: 8090
+  port: ${PORT:8090}
   servlet:
     context-path: /app-manager/v1
 
