@@ -23,10 +23,11 @@ spring:
     baseline-on-migrate: true
 
 server:
-  port: 8090
+  port: ${PORT:8090}
   servlet:
     context-path: /app-manager/v1
 
 jwt:
-  secret: ${JWT_SECRET:ZzZJZVZxZ0ZxV2ZzZ0ZxZlZxZ1ZxZlZxZ3ZxZlZxZ2ZxZlZxZzZxZlZxZ0ZxZlZxZ1ZxZlZx}
-  expiration: ${JWT_EXPIRATION:16000}
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
+
