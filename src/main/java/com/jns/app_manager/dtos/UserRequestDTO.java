@@ -6,6 +6,5 @@ public record UserRequestDTO(
         String password,
         String phoneNumber,
         String councilRegistrationNumber,
-        String subscriptionType,
-        String imageProfile
+        String subscriptionType
 ) {}

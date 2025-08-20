@@ -22,7 +22,7 @@ public class UserController {
         return ResponseEntity.ok(service.findById(id));
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<UserResponseDTO> save(@RequestBody @Valid UserRequestDTO dto) {
         return ResponseEntity.ok(service.save(dto));
     }
