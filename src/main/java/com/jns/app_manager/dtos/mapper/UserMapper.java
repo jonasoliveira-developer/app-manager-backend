@@ -32,8 +32,6 @@ public  class UserMapper  {
                 .password(dto.password())
                 .phoneNumber(dto.phoneNumber())
                 .councilRegistrationNumber(dto.councilRegistrationNumber())
-                .subscriptionType(SubscriptionType.valueOf(dto.subscriptionType()))
-                .imageProfile(dto.imageProfile())
                 .build();
     }
 }

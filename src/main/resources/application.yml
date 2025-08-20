@@ -3,9 +3,9 @@ spring:
     name: app-manager
 
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${DB_URL:jdbc:mysql://localhost:3306/app_manager_db}
+    username: ${DB_USERNAME:app_manager}
+    password: ${DB_PASSWORD:app_manager}
 
   jpa:
     hibernate:
@@ -30,3 +30,4 @@ server:
 jwt:
   secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION}
+

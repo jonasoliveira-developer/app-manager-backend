@@ -35,6 +35,7 @@ public class UserService {
         user.setPassword(encoder.encode(dto.password()));
         user.setAccountStatus(AccountStatus.ACTIVE);
         user.setAccessLevel(AccessLevel.USER);
+        user.setSubscriptionType(SubscriptionType.FREE);
 
         return mapper.toResponse(userRepository.save(user));
     }
