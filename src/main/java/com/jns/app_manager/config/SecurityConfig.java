@@ -36,7 +36,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("http://localhost:3000")); // origem do frontend
+        config.setAllowedOrigins(List.of("http://localhost:3000", "https://backend-app-v1.up.railway.app")); // origem do frontend
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
 
