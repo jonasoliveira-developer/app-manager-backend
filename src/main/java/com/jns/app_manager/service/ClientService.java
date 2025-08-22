@@ -58,7 +58,6 @@ public class ClientService {
         client.setWeight(dto.weight());
         client.setHeight(dto.height());
         client.setLocal(dto.local());
-        client.setImageProfile(dto.imageProfile());
         return mapper.toResponse(clientRepository.save(client));
     }
 
