@@ -11,6 +11,7 @@ public record UserResponseDTO(
         String email,
         String phoneNumber,
         String councilRegistrationNumber,
+        String imageProfile,
         String subscriptionType,
         AccountStatus accountStatus
 ) {}

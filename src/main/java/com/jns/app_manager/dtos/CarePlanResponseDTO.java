@@ -11,9 +11,9 @@ public record CarePlanResponseDTO(
         UUID id,
         UUID userId,
         UUID clientId,
+        String paymentId,
         LocalDate startDate,
         LocalDate expectedEndDate,
         LocalDate actualEndDate,
-        UUID paymentId,
         List<Schedule> schedule
 ) {}

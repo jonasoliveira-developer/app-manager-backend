@@ -13,7 +13,6 @@ import java.util.UUID;
 
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, UUID> {
-    Page<Payment> findByClientIdAndTitleContainingIgnoreCase(UUID clientId, String title, Pageable pageable);
+    Page<Payment> findByClientId(UUID clientId, Pageable pageable);
     List<Payment> findByPaymentStatus(PaymentStatus status);
-    Optional<Payment> findByCarePlanId(UUID carePlanId);
 }

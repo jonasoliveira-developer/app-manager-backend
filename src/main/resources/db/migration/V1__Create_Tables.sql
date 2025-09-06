@@ -9,7 +9,9 @@ CREATE TABLE users (
     subscription_type VARCHAR(50) NOT NULL CHECK (subscription_type IN ('FREE','BASIC','PREMIUM','TEST')),
     account_status VARCHAR(20) NOT NULL CHECK (account_status IN ('ACTIVE', 'INACTIVE', 'BLOCKED', 'DELETED')),
     access_level VARCHAR(20) NOT NULL CHECK (access_level IN ( 'ROOT','ADMINISTRATOR','USER','CLIENT')),
-    image_profile VARCHAR(255),
+    image_profile TEXT,
+    image_water_mark TEXT,
+    image_mimi_type VARCHAR(20),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -26,7 +28,9 @@ CREATE TABLE clients (
     local VARCHAR(100),
     account_status VARCHAR(20) NOT NULL CHECK (account_status IN ('ACTIVE', 'INACTIVE', 'BLOCKED', 'DELETED')),
     access_level VARCHAR(20) NOT NULL CHECK (access_level IN ( 'ROOT','ADMINISTRATOR','USER','CLIENT')),
-    image_profile VARCHAR(255),
+    image_profile TEXT,
+    image_water_mark TEXT,
+    image_mimi_type VARCHAR(20),
     user_id VARCHAR(36),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -38,6 +42,7 @@ CREATE TABLE care_plans (
     title VARCHAR(100) NOT NULL,
     user_id VARCHAR(36),
     client_id VARCHAR(36),
+    payment_id VARCHAR(36),
     start_date DATE NOT NULL,
     expected_end_date DATE,
     actual_end_date DATE,
@@ -52,7 +57,8 @@ CREATE TABLE schedules (
     id VARCHAR(36) PRIMARY KEY,
     day_of_week VARCHAR(20) NOT NULL,
     session_time VARCHAR(10) NOT NULL,
-    care_plan_id VARCHAR(36) NOT NULL,
+    color VARCHAR(10) NOT NULL,
+    care_plan_id VARCHAR(36),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
@@ -61,15 +67,13 @@ CREATE TABLE schedules (
 
 CREATE TABLE payments (
     id VARCHAR(36) PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
     opened_date DATE NOT NULL,
     closed_date DATE,
     payment_status VARCHAR(20) CHECK ( payment_status IN ('OPEN', 'CLOSED', 'LATE')),
-    care_plan_id VARCHAR(36),
     client_id VARCHAR(36),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (care_plan_id) REFERENCES care_plans(id),
     FOREIGN KEY (client_id) REFERENCES clients(id)
 );
 

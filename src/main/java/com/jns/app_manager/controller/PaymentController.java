@@ -33,7 +33,7 @@ public class PaymentController {
             @RequestParam(required = false, defaultValue = "") String title,
             Pageable pageable) {
 
-        var response = paymentService.findAllByClientIdAndTitle(clientId, title, pageable);
+        var response = paymentService.findAllByClientId(clientId, title, pageable);
         return ResponseEntity.ok(response);
     }
 

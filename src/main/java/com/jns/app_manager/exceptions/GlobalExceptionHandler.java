@@ -27,4 +27,18 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
     }
+
+    @ExceptionHandler(ViolationIntegrityException.class)
+    public ResponseEntity<Map<String, Object>> handleViolationIntegrity(
+            ViolationIntegrityException ex,
+            HttpServletRequest request
+    ) {
+        Map<String, Object> problem = new LinkedHashMap<>();
+        problem.put("type", "https://app-manager.jns.com/errors/integrity-violation");
+        problem.put("title", ex.getMessage());
+        problem.put("status", HttpStatus.CONFLICT.value());
+        problem.put("instance", request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
+    }
 }

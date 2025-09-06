@@ -38,8 +38,8 @@ public class CarePlan extends Audit{
     @OneToMany(mappedBy = "carePlan" , fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedule;
 
-    @OneToOne(mappedBy = "carePlan", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Payment payment;
+    @Column(name = "payment_id")
+    private String paymentId;
 
     private LocalDate startDate;
     private LocalDate expectedEndDate;

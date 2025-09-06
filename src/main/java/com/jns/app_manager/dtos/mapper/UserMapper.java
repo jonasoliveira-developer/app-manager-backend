@@ -19,6 +19,7 @@ public  class UserMapper  {
                 user.getEmail(),
                 user.getPhoneNumber(),
                 user.getCouncilRegistrationNumber(),
+                user.getImageProfile(),
                 user.getSubscriptionType().name(),
                 user.getAccountStatus()
 

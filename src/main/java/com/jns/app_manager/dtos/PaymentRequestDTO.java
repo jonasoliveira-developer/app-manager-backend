@@ -2,13 +2,12 @@ package com.jns.app_manager.dtos;
 
 import com.jns.app_manager.enums.PaymentStatus;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
 public record PaymentRequestDTO(
-        String title,
-        LocalDate openedDate,
+        BigDecimal amount,
         PaymentStatus paymentStatus,
-        UUID carePlanId,
-        UUID clientId
+        UUID carePlanId
 ) {}

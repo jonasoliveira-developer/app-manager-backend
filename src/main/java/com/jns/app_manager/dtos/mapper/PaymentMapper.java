@@ -7,15 +7,15 @@ import com.jns.app_manager.entity.Client;
 import com.jns.app_manager.entity.Payment;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class PaymentMapper {
 
-    public Payment toEntity(PaymentRequestDTO dto, CarePlan carePlan, Client client) {
+    public Payment toEntity(PaymentRequestDTO dto,  Client client) {
         return Payment.builder()
-                .title(dto.title())
-                .openedDate(dto.openedDate())
+                .amount(dto.amount())
                 .paymentStatus(dto.paymentStatus())
-                .carePlan(carePlan)
                 .client(client)
                 .build();
     }
@@ -23,11 +23,10 @@ public class PaymentMapper {
     public PaymentResponseDTO toResponse(Payment payment) {
         return new PaymentResponseDTO(
                 payment.getId(),
-                payment.getTitle(),
+                payment.getAmount(),
                 payment.getOpenedDate(),
                 payment.getClosedDate(),
                 payment.getPaymentStatus(),
-                payment.getCarePlan().getId(),
                 payment.getClient().getId()
         );
     }
