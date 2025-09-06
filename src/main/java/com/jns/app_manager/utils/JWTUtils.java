@@ -2,6 +2,7 @@ package com.jns.app_manager.utils;
 
 import com.jns.app_manager.security.dtos.UserDetailsDTO;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,8 +20,9 @@ public class JWTUtils {
     private Long expiration;
 
     public String generateToken(final UserDetailsDTO detailsDTO) {
-        byte[] keyBytes = Base64.getUrlDecoder().decode(secret);
+        byte[] keyBytes = Decoders.BASE64.decode(secret); // usa o decodificador padrão
         Key key = Keys.hmacShaKeyFor(keyBytes);
+        ;
 
 
         return Jwts.builder()
