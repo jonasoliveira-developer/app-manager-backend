@@ -12,11 +12,27 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<Map<String, Object>> handleEmailAlreadyExceptions
+            (
+                EmailAlreadyExistsException ex,
+                HttpServletRequest request
+            ) {
+
+        Map<String, Object> problem = new LinkedHashMap<>();
+        problem.put("type", "https://app-manager.jns.com/errors/object-not-found");
+        problem.put("title", ex.getMessage());
+        problem.put("status", HttpStatus.CONFLICT.value());
+        problem.put("instance", request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
+    }
+
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleObjectNotFound
             (
-                ObjectNotFoundException ex,
-                HttpServletRequest request
+                    ObjectNotFoundException ex,
+                    HttpServletRequest request
             ) {
 
         Map<String, Object> problem = new LinkedHashMap<>();
@@ -27,6 +43,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
     }
+
 
     @ExceptionHandler(ViolationIntegrityException.class)
     public ResponseEntity<Map<String, Object>> handleViolationIntegrity(

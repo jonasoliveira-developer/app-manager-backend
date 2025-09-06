@@ -7,6 +7,7 @@ import com.jns.app_manager.entity.User;
 import com.jns.app_manager.enums.AccessLevel;
 import com.jns.app_manager.enums.AccountStatus;
 import com.jns.app_manager.enums.SubscriptionType;
+import com.jns.app_manager.exceptions.EmailAlreadyExistsException;
 import com.jns.app_manager.exceptions.ObjectNotFoundException;
 import com.jns.app_manager.repository.UserRepository;
 import com.jns.app_manager.utils.PasswordGenerator;
@@ -34,6 +35,8 @@ public class UserService {
     }
 
     public UserResponseDTO save(UserRequestDTO dto) throws MessagingException {
+        validateEmailUniqueness(dto.email());
+
         var user = mapper.toEntity(dto);
         var password = PasswordGenerator.generate(8);
         user.setPassword(encoder.encode(password));
@@ -96,6 +99,12 @@ public class UserService {
     public User findUser(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado: " + id));
+    }
+
+    private void validateEmailUniqueness(String email) {
+        userRepository.findByEmail(email).ifPresent(user -> {
+            throw new EmailAlreadyExistsException(email);
+        });
     }
 
 }
