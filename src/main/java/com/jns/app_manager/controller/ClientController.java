@@ -5,6 +5,7 @@ package com.jns.app_manager.controller;
 import com.jns.app_manager.dtos.ClientRequestDTO;
 import com.jns.app_manager.dtos.ClientResponseDTO;
 import com.jns.app_manager.service.ClientService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -41,7 +42,7 @@ public class ClientController {
 
 
     @PostMapping
-    public ResponseEntity<ClientResponseDTO> save(@RequestBody @Valid ClientRequestDTO dto) {
+    public ResponseEntity<ClientResponseDTO> save(@RequestBody @Valid ClientRequestDTO dto) throws MessagingException {
         var saved = service.save(dto);
         return ResponseEntity.ok(saved);
     }

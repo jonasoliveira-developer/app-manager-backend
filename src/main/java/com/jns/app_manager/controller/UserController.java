@@ -3,6 +3,7 @@ package com.jns.app_manager.controller;
 import com.jns.app_manager.dtos.UserRequestDTO;
 import com.jns.app_manager.dtos.UserResponseDTO;
 import com.jns.app_manager.service.UserService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<UserResponseDTO> save(@RequestBody @Valid UserRequestDTO dto) {
+    public ResponseEntity<UserResponseDTO> save(@RequestBody @Valid UserRequestDTO dto) throws MessagingException {
         return ResponseEntity.ok(service.save(dto));
     }
 

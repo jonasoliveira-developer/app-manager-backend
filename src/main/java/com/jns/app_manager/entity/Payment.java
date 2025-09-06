@@ -7,6 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -24,16 +25,13 @@ public class Payment extends Audit{
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID id;
 
-    private String title;
+    private BigDecimal amount;
 
     private LocalDate openedDate;
     private LocalDate closedDate;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
-
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private CarePlan carePlan;
 
     @ManyToOne
     @JsonIgnore

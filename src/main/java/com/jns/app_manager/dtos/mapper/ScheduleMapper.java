@@ -14,6 +14,7 @@ public class ScheduleMapper {
                 schedule.getId(),
                 schedule.getDayOfWeek(),
                 schedule.getSessionTime(),
+                schedule.getColor(),
                 schedule.getCarePlan().getId()
         );
     }
@@ -22,6 +23,7 @@ public class ScheduleMapper {
         return Schedule.builder()
                 .dayOfWeek(dto.dayOfWeek())
                 .sessionTime(dto.sessionTime())
+                .color(dto.color())
                 .carePlan(carePlan)
                 .build();
     }

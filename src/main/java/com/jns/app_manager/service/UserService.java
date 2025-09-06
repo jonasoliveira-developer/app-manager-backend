@@ -9,10 +9,13 @@ import com.jns.app_manager.enums.AccountStatus;
 import com.jns.app_manager.enums.SubscriptionType;
 import com.jns.app_manager.exceptions.ObjectNotFoundException;
 import com.jns.app_manager.repository.UserRepository;
+import com.jns.app_manager.utils.PasswordGenerator;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @Service
@@ -22,6 +25,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper mapper;
     private final BCryptPasswordEncoder encoder;
+    private final EmailService emailService;
 
 
     public UserResponseDTO findById(UUID id) {
@@ -29,13 +33,35 @@ public class UserService {
         return mapper.toResponse(user);
     }
 
-    public UserResponseDTO save(UserRequestDTO dto) {
+    public UserResponseDTO save(UserRequestDTO dto) throws MessagingException {
         var user = mapper.toEntity(dto);
-
-        user.setPassword(encoder.encode(dto.password()));
+        var password = PasswordGenerator.generate(8);
+        user.setPassword(encoder.encode(password));
         user.setAccountStatus(AccountStatus.ACTIVE);
         user.setAccessLevel(AccessLevel.USER);
         user.setSubscriptionType(SubscriptionType.FREE);
+
+        String bodyEmailMessage = String.format(
+                "Olá <strong>%s</strong>,<br><br>" +
+                        "É um prazer recebê-lo(a) no <strong>FisioAdmin</strong>, sua nova plataforma de gestão inteligente para profissionais da saúde.<br><br>" +
+                        "Abaixo estão suas credenciais de acesso. Por segurança, recomendamos que você acesse o aplicativo e personalize sua senha diretamente no seu perfil.<br><br>" +
+                        "Estamos felizes em tê-lo(a) conosco e desejamos uma excelente jornada!",
+                user.getName()
+        );
+
+        try {
+            emailService.sendTemplatedEmail(
+                    user.getEmail(),
+                    "Credenciais de acesso",
+                    bodyEmailMessage,
+                    "FisioAdmin",
+                    password
+            );
+        } catch (IOException e) {
+            // Loga o erro e continua o fluxo
+            System.err.println("Erro ao carregar o template de e-mail: " + e.getMessage());
+            // Se quiser, pode lançar uma exceção customizada ou apenas seguir sem enviar o e-mail
+        }
 
         return mapper.toResponse(userRepository.save(user));
     }
@@ -47,6 +73,15 @@ public class UserService {
         user.setPhoneNumber(dto.phoneNumber());
         user.setCouncilRegistrationNumber(dto.councilRegistrationNumber());
         user.setSubscriptionType(SubscriptionType.valueOf(dto.subscriptionType()));
+
+        // Verifica se a senha recebida é diferente da atual
+        if (!encoder.matches(dto.password(), user.getPassword())) {
+            // Se não bater, significa que é uma nova senha → codifica e atualiza
+            user.setPassword(encoder.encode(dto.password()));
+        } else {
+            // Se for igual, mantém a senha atual
+            user.setPassword(user.getPassword());
+        }
 
         return mapper.toResponse(userRepository.save(user));
     }

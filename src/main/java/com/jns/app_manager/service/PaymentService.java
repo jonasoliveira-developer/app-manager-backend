@@ -2,6 +2,7 @@ package com.jns.app_manager.service;
 
 import com.jns.app_manager.dtos.PaymentRequestDTO;
 import com.jns.app_manager.dtos.PaymentResponseDTO;
+import com.jns.app_manager.dtos.mapper.CarePlanMapper;
 import com.jns.app_manager.dtos.mapper.PaymentMapper;
 import com.jns.app_manager.entity.Payment;
 import com.jns.app_manager.entity.User;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
-    private final CarePlanService carePlanService;
+    private final CarePlanRepository carePlanRepository;
     private final ClientService clientService;
     private final PaymentMapper paymentMapper;
 
@@ -34,22 +35,28 @@ public class PaymentService {
         return paymentMapper.toResponse(payment);
     }
 
-    public Page<PaymentResponseDTO> findAllByClientIdAndTitle(UUID clientId, String title, Pageable pageable) {
-        return paymentRepository.findByClientIdAndTitleContainingIgnoreCase(clientId, title, pageable)
+    public Page<PaymentResponseDTO> findAllByClientId(UUID clientId, String title, Pageable pageable) {
+        return paymentRepository.findByClientId(clientId, pageable)
                 .map(paymentMapper::toResponse);
     }
 
     public PaymentResponseDTO save(PaymentRequestDTO dto) {
-        var carePlan = carePlanService.findCarePlan(dto.carePlanId());
-        var client = clientService.findClient(dto.clientId());
-        var payment = paymentMapper.toEntity(dto, carePlan, client);
+
+        var carePlan = carePlanRepository.findById(dto.carePlanId())
+                .orElseThrow(() -> new ObjectNotFoundException("CarePlan não encontrado para ID: " + dto.carePlanId()));
+
+        var client = carePlan.getClient();
+        var payment = paymentMapper.toEntity(dto, client);
+        payment.setOpenedDate(LocalDate.now());
+        payment.setPaymentStatus(PaymentStatus.OPEN);
         var saved = paymentRepository.save(payment);
+        carePlan.setPaymentId(String.valueOf(saved.getId()));
+        carePlanRepository.save(carePlan);
         return paymentMapper.toResponse(saved);
     }
 
     public PaymentResponseDTO update(UUID id, PaymentRequestDTO dto) {
         var payment = findPayment(id);
-            payment.setTitle(dto.title());
             payment.setPaymentStatus(dto.paymentStatus());
         if(dto.paymentStatus().equals(PaymentStatus.CLOSED)) {
             payment.setClosedDate(LocalDate.now());

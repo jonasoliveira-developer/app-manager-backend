@@ -6,5 +6,6 @@ public record ScheduleResponseDTO(
         UUID id,
         String dayOfWeek,
         String sessionTime,
+        String color,
         UUID carePlanId
 ) {}

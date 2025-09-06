@@ -37,7 +37,6 @@ public class CarePlanService {
                 .title(dto.title())
                 .user(user)
                 .client(client)
-                .payment(null)
                 .startDate(dto.startDate())
                 .expectedEndDate(dto.expectedEndDate())
                 .schedule(dto.schedule())

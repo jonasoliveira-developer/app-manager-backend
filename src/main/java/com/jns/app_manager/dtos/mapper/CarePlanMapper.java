@@ -19,10 +19,10 @@ public class CarePlanMapper {
                 plan.getId(),
                 plan.getUser().getId(),
                 plan.getClient().getId(),
+                plan.getPaymentId(),
                 plan.getStartDate(),
                 plan.getExpectedEndDate(),
                 plan.getActualEndDate(),
-                plan.getPayment() != null ? plan.getPayment().getId() : null,
                 plan.getSchedule()
         );
     }
@@ -33,7 +33,7 @@ public class CarePlanMapper {
                 .title(dto.title())
                 .user(user)
                 .client(client)
-                .payment(payment)
+                .paymentId(String.valueOf(payment.getId()))
                 .startDate(dto.startDate())
                 .expectedEndDate(dto.expectedEndDate())
                 .schedule(dto.schedule())

@@ -36,5 +36,14 @@ public abstract class Person {
     @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
 
+    @Lob
+    @Column(name = "image_profile",columnDefinition = "TEXT")
     private String imageProfile;
+
+    @Lob
+    @Column(name = "image_water_mark",columnDefinition = "TEXT")
+    private String imageWatermark;
+
+    @Column(name = "image_mimi_type")
+    private String imageMimeType;
 }

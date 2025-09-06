@@ -15,7 +15,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name = "schedules")
 @Entity
-public class Schedule extends Audit{
+public class Schedule extends Audit {
+
     @Id
     @GeneratedValue
     @Column(length = 36, columnDefinition = "VARCHAR(36)")
@@ -25,8 +26,11 @@ public class Schedule extends Audit{
     private String dayOfWeek;
     private String sessionTime;
 
+    private String color;
+
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name = "care_plan_id", nullable = true)
     private CarePlan carePlan;
 
 }

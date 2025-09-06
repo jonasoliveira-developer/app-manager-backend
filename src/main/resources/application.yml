@@ -22,6 +22,23 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: appmanageradm@gmail.com
+    password: jwfmmbeospwrovmz
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+app:
+  email:
+    banner-url: https://seudominio.com/imagens/banner.png
+
+
 server:
   port: ${PORT:8090}
   servlet:
@@ -30,4 +47,3 @@ server:
 jwt:
   secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION}
-
