@@ -25,14 +25,19 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: appmanageradm@gmail.com
-    password: jwfmmbeospwrovmz
+    username: ${EMAIL_ADDRESS}
+    password: ${EMAIL_SECRET}
+    protocol: smtp
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
 
 
 server:
