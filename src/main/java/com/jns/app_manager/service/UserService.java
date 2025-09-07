@@ -75,20 +75,21 @@ public class UserService {
         user.setName(dto.name());
         user.setPhoneNumber(dto.phoneNumber());
         user.setCouncilRegistrationNumber(dto.councilRegistrationNumber());
-        user.setSubscriptionType(SubscriptionType.valueOf(dto.subscriptionType()));
 
-        // Verifica se a senha recebida é diferente da atual
-        if (!encoder.matches(dto.password(), user.getPassword())) {
-            // Se não bater, significa que é uma nova senha → codifica e atualiza
-            user.setPassword(encoder.encode(dto.password()));
-        } else {
-            // Se for igual, mantém a senha atual
-            user.setPassword(user.getPassword());
+        if (dto.subscriptionType() != null && !dto.subscriptionType().isBlank()) {
+            user.setSubscriptionType(SubscriptionType.valueOf(dto.subscriptionType()));
+        }
+
+        String novaSenha = dto.password();
+        if (novaSenha != null && !novaSenha.isBlank()) {
+            if (!encoder.matches(novaSenha, user.getPassword())) {
+                user.setPassword(encoder.encode(novaSenha));
+            }
+            // Se for igual, não precisa fazer nada — evita reatribuição desnecessária
         }
 
         return mapper.toResponse(userRepository.save(user));
     }
-
     public void delete(UUID id) {
         var user = findUser(id);
 
