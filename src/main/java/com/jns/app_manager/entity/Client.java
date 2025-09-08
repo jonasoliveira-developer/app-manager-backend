@@ -29,9 +29,9 @@ public class Client extends Person{
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<CarePlan> carePlans;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Payment> payments;
 }
