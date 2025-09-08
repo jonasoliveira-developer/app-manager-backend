@@ -27,6 +27,7 @@ public class CarePlanService {
     private final UserService userService;
     private final ClientService clientService;
     private final CarePlanMapper mapper;
+    private final PaymentService paymentService;
 
     public CarePlanResponseDTO save(CarePlanRequestDTO dto) {
 
@@ -64,8 +65,8 @@ public class CarePlanService {
 
     public void delete(UUID id) {
         var carePlan = findCarePlan(id);
-
         carePlanRepository.deleteById(carePlan.getId());
+        paymentService.delete(UUID.fromString(carePlan.getPaymentId()));
     }
 
     public CarePlan findCarePlan(UUID id) {
