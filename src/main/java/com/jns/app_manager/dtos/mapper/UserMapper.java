@@ -3,7 +3,6 @@ package com.jns.app_manager.dtos.mapper;
 import com.jns.app_manager.dtos.UserRequestDTO;
 import com.jns.app_manager.dtos.UserResponseDTO;
 import com.jns.app_manager.entity.User;
-import com.jns.app_manager.enums.SubscriptionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -19,9 +18,17 @@ public  class UserMapper  {
                 user.getEmail(),
                 user.getPhoneNumber(),
                 user.getCouncilRegistrationNumber(),
-                user.getImageProfile(),
                 user.getSubscriptionType().name(),
-                user.getAccountStatus()
+                user.getAccountStatus(),
+                user.getBiography(),
+                user.getAboutMe(),
+                user.getImageProfile(),
+                user.getImageMimeType(),
+
+                user.getImageUrl()
+
+
+
 
         );
     }

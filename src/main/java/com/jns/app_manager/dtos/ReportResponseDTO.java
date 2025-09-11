@@ -11,5 +11,7 @@ public record ReportResponseDTO(
         LocalDate date,
         String text,
         UUID clientId,
-        UUID userId
+        UUID userId,
+        String assignUrlClient,
+        String assignUrlUser
 ) {}

@@ -18,6 +18,8 @@ public class ReportMapper {
                 .text(dto.text())
                 .client(client)
                 .user(user)
+                .assignUrlClient(dto.assignUrlClient())
+                .assignUrlUser(dto.assignUrlUser())
                 .build();
     }
 
@@ -29,7 +31,9 @@ public class ReportMapper {
                 report.getDate(),
                 report.getText(),
                 report.getClient().getId(),
-                report.getUser().getId()
+                report.getUser().getId(),
+                report.getAssignUrlClient(),
+                report.getAssignUrlUser()
         );
     }
 }

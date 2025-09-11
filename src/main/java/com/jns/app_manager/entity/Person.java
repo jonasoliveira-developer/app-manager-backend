@@ -37,13 +37,19 @@ public abstract class Person {
     private AccountStatus accountStatus;
 
     @Lob
-    @Column(name = "image_profile",columnDefinition = "TEXT")
-    private String imageProfile;
+    @Column(name = "image_profile",columnDefinition = "MEDIUMBLOB")
+    private byte[] imageProfile;
 
     @Lob
-    @Column(name = "image_water_mark",columnDefinition = "TEXT")
-    private String imageWatermark;
+    @Column(name = "image_water_mark",columnDefinition = "MEDIUMBLOB")
+    private byte[] imageWatermark;
 
-    @Column(name = "image_mimi_type")
+    @Column(name = "image_mime_type")
     private String imageMimeType;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
+
+
 }

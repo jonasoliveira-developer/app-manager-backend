@@ -2,6 +2,7 @@ package com.jns.app_manager.controller;
 
 import com.jns.app_manager.dtos.UserRequestDTO;
 import com.jns.app_manager.dtos.UserResponseDTO;
+import com.jns.app_manager.dtos.mapper.UpdatePasswordRequest;
 import com.jns.app_manager.service.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
@@ -32,6 +33,13 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> update(@PathVariable UUID id, @RequestBody @Valid UserRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
+
+    @PutMapping("/password/{id}")
+    public ResponseEntity<?> updatePassword(@PathVariable UUID id, @RequestBody @Valid UpdatePasswordRequest dto) {
+       service.updatePassword(id, dto);
+        return ResponseEntity.noContent().build();
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
