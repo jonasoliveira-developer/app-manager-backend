@@ -25,7 +25,7 @@ public class EmailService {
         helper.setFrom("appmanageradm@gmail.com");
 
 
-        String htmlBody = buildHtmlTemplate(subject, body, userName, password, "");
+        String htmlBody = buildHtmlTemplate(subject, body, userName, password, "https://app-manager-eight.vercel.app/login");
         helper.setText(htmlBody, true);
 
         mailSender.send(message);
