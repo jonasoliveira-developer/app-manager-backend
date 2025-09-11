@@ -15,7 +15,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @With
 @Entity(name = "reports")
-public class Report extends Audit{
+public class Report extends Audit {
+
     @Id
     @GeneratedValue
     @Column(length = 36, columnDefinition = "VARCHAR(36)")
@@ -25,6 +26,7 @@ public class Report extends Audit{
     private String title;
 
     private String councilRegistrationNumber;
+
     private LocalDate date;
 
     @Column(columnDefinition = "TEXT")
@@ -36,4 +38,17 @@ public class Report extends Audit{
     @ManyToOne
     private Client client;
 
+    @Lob
+    private byte[] assignClient;
+
+    private String assignClientMimeType;
+
+    private String assignUrlClient;
+
+    @Lob
+    private byte[] assignUser;
+
+    private String assignUserMimeType;
+
+    private String assignUrlUser;
 }

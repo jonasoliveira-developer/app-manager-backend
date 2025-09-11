@@ -15,6 +15,6 @@ public record ClientResponseDTO(
         String height,
         String local,
         AccountStatus accountStatus,
-        String imageProfile,
+        byte[] imageProfile,
         UUID userId
 ) {}

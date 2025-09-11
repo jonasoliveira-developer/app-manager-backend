@@ -11,6 +11,6 @@ public record ClientRequestDTO(
         String weight,
         String height,
         String local,
-        String imageProfile,
+        byte[] imageProfile,
         UUID userId
 ) {}

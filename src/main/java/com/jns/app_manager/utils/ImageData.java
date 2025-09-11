@@ -1,5 +1,4 @@
 package com.jns.app_manager.utils;
 
 
-public record ImageData(String base64, String mimeType) {
-}
+public record ImageData(byte[] bytes, String mimeType) {}

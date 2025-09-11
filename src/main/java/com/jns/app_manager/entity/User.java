@@ -19,12 +19,23 @@ import java.util.UUID;
 @AllArgsConstructor
 @Table(name = "users")
 @Entity
+@Getter
+@Setter
 public class User extends Person {
 
-    String councilRegistrationNumber;
+    private String councilRegistrationNumber;
 
     @Enumerated(EnumType.STRING)
     private SubscriptionType subscriptionType;
+
+    @Enumerated(EnumType.STRING)
+    private AccountStatus accountStatus;
+
+    @Column(length = 500)
+    private String biography;
+
+    @Column(length = 1000)
+    private String aboutMe;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Client> clients;
@@ -35,4 +46,6 @@ public class User extends Person {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Report> reports;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Expense> expenses;
 }

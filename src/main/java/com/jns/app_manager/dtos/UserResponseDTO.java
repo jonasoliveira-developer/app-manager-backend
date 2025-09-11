@@ -1,8 +1,8 @@
 package com.jns.app_manager.dtos;
 
 import com.jns.app_manager.enums.AccountStatus;
+import com.jns.app_manager.enums.SubscriptionType;
 
-import java.util.List;
 import java.util.UUID;
 
 public record UserResponseDTO(
@@ -11,7 +11,13 @@ public record UserResponseDTO(
         String email,
         String phoneNumber,
         String councilRegistrationNumber,
-        String imageProfile,
         String subscriptionType,
-        AccountStatus accountStatus
-) {}
+        AccountStatus accountStatus,
+        String biography,
+        String aboutMe,
+        byte[] imageProfile,
+        String imageMimeType,
+        String imageUrl
+) {
+
+}

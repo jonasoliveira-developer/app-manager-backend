@@ -2,6 +2,7 @@ package com.jns.app_manager.service;
 
 import com.jns.app_manager.dtos.UserRequestDTO;
 import com.jns.app_manager.dtos.UserResponseDTO;
+import com.jns.app_manager.dtos.mapper.UpdatePasswordRequest;
 import com.jns.app_manager.dtos.mapper.UserMapper;
 import com.jns.app_manager.entity.User;
 import com.jns.app_manager.enums.AccessLevel;
@@ -80,21 +81,15 @@ public class UserService {
             user.setSubscriptionType(SubscriptionType.valueOf(dto.subscriptionType()));
         }
 
-        String novaSenha = dto.password();
-        if (novaSenha != null && !novaSenha.isBlank()) {
-            if (!encoder.matches(novaSenha, user.getPassword())) {
-                user.setPassword(encoder.encode(novaSenha));
-            }
-            // Se for igual, não precisa fazer nada — evita reatribuição desnecessária
+        if (dto.biography() != null && !dto.biography().isBlank()) {
+            user.setBiography(dto.biography());
+        }
+
+        if (dto.aboutMe() != null && !dto.aboutMe().isBlank()) {
+            user.setAboutMe(dto.aboutMe());
         }
 
         return mapper.toResponse(userRepository.save(user));
-    }
-    public void delete(UUID id) {
-        var user = findUser(id);
-
-        user.setAccountStatus(AccountStatus.DELETED);
-        userRepository.save(user);
     }
 
     public User findUser(UUID id) {
@@ -107,5 +102,30 @@ public class UserService {
             throw new EmailAlreadyExistsException(email);
         });
     }
+
+    public void delete(UUID id) {
+        var user = findUser(id);
+
+        user.setAccountStatus(AccountStatus.DELETED);
+        userRepository.save(user);
+    }
+
+    public void updatePassword(UUID id, UpdatePasswordRequest dto) {
+        var user = findUser(id);
+
+        boolean matches = encoder.matches(dto.getOldPassword(), user.getPassword());
+
+        if (!matches) {
+            throw new IllegalArgumentException("Senha antiga não confere.");
+        }
+
+        String encodedNewPassword = encoder.encode(dto.getNewPassword());
+        user.setPassword(encodedNewPassword);
+
+        userRepository.save(user);
+    }
+
+
+
 
 }

@@ -25,6 +25,8 @@ public class Client extends Person{
     private String height;
     private String local;
 
+    @Enumerated(EnumType.STRING)
+    private AccountStatus accountStatus;
 
     @ManyToOne
     private User user;
