@@ -66,7 +66,7 @@ public class ImageService {
             quality -= 0.1f;
         }
 
-        if (compressedBytes == null || compressedBytes.length > 65000) {
+        if (compressedBytes.length > 65000) {
             throw new IllegalArgumentException("Não foi possível comprimir a imagem dentro do limite de 65KB.");
         }
 
