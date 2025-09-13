@@ -42,4 +42,24 @@ public class ImageController {
                     .body(Map.of("error", "Falha ao salvar imagem"));
         }
     }
+
+    @GetMapping("/view")
+    public ResponseEntity<byte[]> viewImage(
+            @RequestParam("type") String type,
+            @RequestParam("id") UUID id
+    ) {
+        try {
+            var imageData = imageService.getImageData(type, id);
+            MediaType mediaType = MediaType.parseMediaType(imageData.mimeType());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(mediaType);
+
+            return new ResponseEntity<>(imageData.bytes(), headers, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

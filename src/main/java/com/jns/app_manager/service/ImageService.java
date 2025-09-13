@@ -40,34 +40,19 @@ public class ImageService {
             throw new IllegalArgumentException("Extensão não permitida: " + ext);
         }
 
-        // Estratégia de compressão adaptativa
-        byte[] compressedBytes = null;
-        int size = 300;
-        float quality = 1.0f;
+        // Comprimir e redimensionar a imagem sem perda de qualidade
+        InputStream inputStream = file.getInputStream();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-        while (size >= 100 && quality >= 0.4f) {
-            InputStream inputStream = file.getInputStream();
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        Thumbnails.of(inputStream)
+                .size(300, 300) // Redimensiona para 300x300
+                .outputFormat("png") // Compressão sem perda
+                .toOutputStream(outputStream);
 
-            Thumbnails.of(inputStream)
-                    .size(size, size)
-                    .outputFormat("jpg") // JPEG com compressão ajustável
-                    .outputQuality(quality)
-                    .toOutputStream(outputStream);
-
-            compressedBytes = outputStream.toByteArray();
-
-            if (compressedBytes.length <= 65000) {
-                break;
-            }
-
-            // Reduz progressivamente
-            size -= 50;
-            quality -= 0.1f;
-        }
+        byte[] compressedBytes = outputStream.toByteArray();
 
         if (compressedBytes.length > 65000) {
-            throw new IllegalArgumentException("Não foi possível comprimir a imagem dentro do limite de 65KB.");
+            throw new IllegalArgumentException("Imagem comprimida ainda excede o limite do banco.");
         }
 
         String baseUri = request.getRequestURL().toString()
@@ -80,7 +65,7 @@ public class ImageService {
                 var user = userRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
                 user.setImageProfile(compressedBytes);
-                user.setImageMimeType("image/jpeg");
+                user.setImageMimeType("image/png");
                 user.setImageUrl(imageUrl);
                 userRepository.save(user);
             }
@@ -88,7 +73,7 @@ public class ImageService {
                 var client = clientRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
                 client.setImageProfile(compressedBytes);
-                client.setImageMimeType("image/jpeg");
+                client.setImageMimeType("image/png");
                 client.setImageUrl(imageUrl);
                 clientRepository.save(client);
             }
@@ -96,7 +81,7 @@ public class ImageService {
                 var user = userRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
                 user.setImageWatermark(compressedBytes);
-                user.setImageMimeType("image/jpeg");
+                user.setImageMimeType("image/png");
                 user.setImageUrl(imageUrl);
                 userRepository.save(user);
             }
@@ -104,7 +89,7 @@ public class ImageService {
                 var report = reportRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Relatório não encontrado"));
                 report.setAssignClient(compressedBytes);
-                report.setAssignClientMimeType("image/jpeg");
+                report.setAssignClientMimeType("image/png");
                 report.setAssignUrlClient(imageUrl);
                 reportRepository.save(report);
             }
@@ -112,7 +97,7 @@ public class ImageService {
                 var report = reportRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Relatório não encontrado"));
                 report.setAssignUser(compressedBytes);
-                report.setAssignUserMimeType("image/jpeg");
+                report.setAssignUserMimeType("image/png");
                 report.setAssignUrlUser(imageUrl);
                 reportRepository.save(report);
             }
@@ -120,5 +105,26 @@ public class ImageService {
         }
 
         return imageUrl;
+    }
+
+    public ImageData getImageData(String type, UUID id) {
+        return switch (type.toLowerCase()) {
+            case "user" -> userRepository.findById(id)
+                    .map(user -> new ImageData(user.getImageProfile(), user.getImageMimeType()))
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+            case "client" -> clientRepository.findById(id)
+                    .map(client -> new ImageData(client.getImageProfile(), client.getImageMimeType()))
+                    .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+            case "watermark" -> userRepository.findById(id)
+                    .map(user -> new ImageData(user.getImageWatermark(), user.getImageMimeType()))
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+            case "assignclient" -> reportRepository.findById(id)
+                    .map(report -> new ImageData(report.getAssignClient(), report.getAssignClientMimeType()))
+                    .orElseThrow(() -> new RuntimeException("Relatório não encontrado"));
+            case "assignuser" -> reportRepository.findById(id)
+                    .map(report -> new ImageData(report.getAssignUser(), report.getAssignUserMimeType()))
+                    .orElseThrow(() -> new RuntimeException("Relatório não encontrado"));
+            default -> throw new IllegalArgumentException("Tipo inválido. Use 'user', 'client', 'watermark', 'assignClient' ou 'assignUser'.");
+        };
     }
 }
