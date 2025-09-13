@@ -10,6 +10,6 @@ public class EmailRequestDTO {
     private String subject;
     private String body;
     private String userName;
-    private String password; // opcional
+    private String password;
 
 }

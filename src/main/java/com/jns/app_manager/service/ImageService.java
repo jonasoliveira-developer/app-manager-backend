@@ -40,14 +40,13 @@ public class ImageService {
             throw new IllegalArgumentException("Extensão não permitida: " + ext);
         }
 
-        // Comprimir e redimensionar a imagem
+        // Comprimir e redimensionar a imagem sem perda de qualidade
         InputStream inputStream = file.getInputStream();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         Thumbnails.of(inputStream)
-                .size(600, 600)
-                .outputFormat("jpg")
-                .outputQuality(0.6f)
+                .size(300, 300) // Redimensiona para 300x300
+                .outputFormat("png") // Compressão sem perda
                 .toOutputStream(outputStream);
 
         byte[] compressedBytes = outputStream.toByteArray();
@@ -66,7 +65,7 @@ public class ImageService {
                 var user = userRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
                 user.setImageProfile(compressedBytes);
-                user.setImageMimeType(file.getContentType());
+                user.setImageMimeType("image/png");
                 user.setImageUrl(imageUrl);
                 userRepository.save(user);
             }
@@ -74,7 +73,7 @@ public class ImageService {
                 var client = clientRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
                 client.setImageProfile(compressedBytes);
-                client.setImageMimeType(file.getContentType());
+                client.setImageMimeType("image/png");
                 client.setImageUrl(imageUrl);
                 clientRepository.save(client);
             }
@@ -82,7 +81,7 @@ public class ImageService {
                 var user = userRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
                 user.setImageWatermark(compressedBytes);
-                user.setImageMimeType(file.getContentType());
+                user.setImageMimeType("image/png");
                 user.setImageUrl(imageUrl);
                 userRepository.save(user);
             }
@@ -90,7 +89,7 @@ public class ImageService {
                 var report = reportRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Relatório não encontrado"));
                 report.setAssignClient(compressedBytes);
-                report.setAssignClientMimeType(file.getContentType());
+                report.setAssignClientMimeType("image/png");
                 report.setAssignUrlClient(imageUrl);
                 reportRepository.save(report);
             }
@@ -98,7 +97,7 @@ public class ImageService {
                 var report = reportRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Relatório não encontrado"));
                 report.setAssignUser(compressedBytes);
-                report.setAssignUserMimeType(file.getContentType());
+                report.setAssignUserMimeType("image/png");
                 report.setAssignUrlUser(imageUrl);
                 reportRepository.save(report);
             }
