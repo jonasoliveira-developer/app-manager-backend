@@ -1,19 +1,28 @@
 package com.jns.app_manager.service;
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.ClientConfiguration;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.client.builder.AwsClientBuilder;
 import com.jns.app_manager.enums.ImageExtension;
 import com.jns.app_manager.repository.ClientRepository;
 import com.jns.app_manager.repository.ReportRepository;
 import com.jns.app_manager.repository.UserRepository;
-import com.jns.app_manager.utils.ImageData;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import jakarta.servlet.http.HttpServletRequest;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 
 @Service
@@ -23,6 +32,34 @@ public class ImageService {
     private final UserRepository userRepository;
     private final ClientRepository clientRepository;
     private final ReportRepository reportRepository;
+
+    @Value("${stackhero.s3.access-key}")
+    private String accessKey;
+
+    @Value("${stackhero.s3.secret-key}")
+    private String secretKey;
+
+    @Value("${stackhero.s3.bucket}")
+    private String bucketName;
+
+    @Value("${stackhero.s3.endpoint}")
+    private String endpoint;
+
+    private AmazonS3 s3Client;
+
+    @PostConstruct
+    public void init() {
+        BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+        ClientConfiguration config = new ClientConfiguration();
+        config.setSignerOverride("AWSS3V4SignerType");
+
+        s3Client = AmazonS3ClientBuilder.standard()
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, "auto"))
+                .withPathStyleAccessEnabled(true)
+                .withClientConfiguration(config)
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .build();
+    }
 
     public String handleImageUpload(MultipartFile file, String type, UUID id, HttpServletRequest request) throws IOException {
         if (file.isEmpty()) {
@@ -34,97 +71,81 @@ public class ImageService {
             throw new IllegalArgumentException("Arquivo sem extensão");
         }
 
-        String ext = originalFilename.substring(originalFilename.lastIndexOf('.') + 1);
+        String ext = originalFilename.substring(originalFilename.lastIndexOf('.') + 1).toLowerCase();
         ImageExtension imageExt = ImageExtension.fromExtension(ext);
         if (imageExt == null) {
             throw new IllegalArgumentException("Extensão não permitida: " + ext);
         }
 
-        // Comprimir e redimensionar a imagem sem perda de qualidade
-        InputStream inputStream = file.getInputStream();
+        // Comprimir e redimensionar
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-        Thumbnails.of(inputStream)
-                .size(300, 300) // Redimensiona para 300x300
-                .outputFormat("png") // Compressão sem perda
+        Thumbnails.of(file.getInputStream())
+                .size(600, 600)
+                .outputFormat("jpg")
+                .outputQuality(0.6f)
                 .toOutputStream(outputStream);
 
         byte[] compressedBytes = outputStream.toByteArray();
 
         if (compressedBytes.length > 65000) {
-            throw new IllegalArgumentException("Imagem comprimida ainda excede o limite do banco.");
+            throw new IllegalArgumentException("Imagem comprimida ainda excede o limite permitido.");
         }
 
-        String baseUri = request.getRequestURL().toString()
-                .replace(request.getRequestURI(), request.getContextPath());
+        // Gerar nome único
+        String filename = "images/" + UUID.randomUUID() + ".jpg";
 
-        String imageUrl = String.format("%s/images/view?type=%s&id=%s", baseUri, type.toLowerCase(), id);
+        // Upload para Stackhero S3
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType("image/jpeg");
+        metadata.setContentLength(compressedBytes.length);
 
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(compressedBytes);
+        PutObjectRequest putRequest = new PutObjectRequest(bucketName, filename, inputStream, metadata);
+        s3Client.putObject(putRequest);
+
+        // URL pública
+        String imageUrl = String.format("https://%s.s3.stackhero.io/%s", bucketName, filename);
+
+        // Atualizar entidade no banco
         switch (type.toLowerCase()) {
             case "user" -> {
                 var user = userRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-                user.setImageProfile(compressedBytes);
-                user.setImageMimeType("image/png");
                 user.setImageUrl(imageUrl);
+                user.setImageMimeType("image/jpeg");
                 userRepository.save(user);
             }
             case "client" -> {
                 var client = clientRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
-                client.setImageProfile(compressedBytes);
-                client.setImageMimeType("image/png");
                 client.setImageUrl(imageUrl);
+                client.setImageMimeType("image/jpeg");
                 clientRepository.save(client);
             }
-            case "watermark" -> {
-                var user = userRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-                user.setImageWatermark(compressedBytes);
-                user.setImageMimeType("image/png");
-                user.setImageUrl(imageUrl);
-                userRepository.save(user);
-            }
+//            case "watermark" -> {
+//                var user = userRepository.findById(id)
+//                        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+//                user.set(imageUrl);
+//                user.setImageMimeType("image/jpeg");
+//                userRepository.save(user);
+//            }
             case "assignclient" -> {
                 var report = reportRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Relatório não encontrado"));
-                report.setAssignClient(compressedBytes);
-                report.setAssignClientMimeType("image/png");
                 report.setAssignUrlClient(imageUrl);
+                report.setAssignClientMimeType("image/jpeg");
                 reportRepository.save(report);
             }
             case "assignuser" -> {
                 var report = reportRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Relatório não encontrado"));
-                report.setAssignUser(compressedBytes);
-                report.setAssignUserMimeType("image/png");
                 report.setAssignUrlUser(imageUrl);
+                report.setAssignUserMimeType("image/jpeg");
                 reportRepository.save(report);
             }
             default -> throw new IllegalArgumentException("Tipo inválido. Use 'user', 'client', 'watermark', 'assignClient' ou 'assignUser'.");
         }
 
         return imageUrl;
-    }
-
-    public ImageData getImageData(String type, UUID id) {
-        return switch (type.toLowerCase()) {
-            case "user" -> userRepository.findById(id)
-                    .map(user -> new ImageData(user.getImageProfile(), user.getImageMimeType()))
-                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-            case "client" -> clientRepository.findById(id)
-                    .map(client -> new ImageData(client.getImageProfile(), client.getImageMimeType()))
-                    .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
-            case "watermark" -> userRepository.findById(id)
-                    .map(user -> new ImageData(user.getImageWatermark(), user.getImageMimeType()))
-                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-            case "assignclient" -> reportRepository.findById(id)
-                    .map(report -> new ImageData(report.getAssignClient(), report.getAssignClientMimeType()))
-                    .orElseThrow(() -> new RuntimeException("Relatório não encontrado"));
-            case "assignuser" -> reportRepository.findById(id)
-                    .map(report -> new ImageData(report.getAssignUser(), report.getAssignUserMimeType()))
-                    .orElseThrow(() -> new RuntimeException("Relatório não encontrado"));
-            default -> throw new IllegalArgumentException("Tipo inválido. Use 'user', 'client', 'watermark', 'assignClient' ou 'assignUser'.");
-        };
     }
 }

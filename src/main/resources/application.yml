@@ -64,3 +64,11 @@ server:
 jwt:
   secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION}
+
+stackhero:
+  s3:
+    access-key: ${AH_S3_OBJECT_STORAGE_STACKHERO_CYAN_ROOT_ACCESS_KEY}
+    secret-key: ${AH_S3_OBJECT_STORAGE_STACKHERO_CYAN_ROOT_SECRET_KEY}
+    endpoint: ${AH_S3_OBJECT_STORAGE_STACKHERO_CYAN_HOST}
+    bucket: ${BUCKET}
+    region: auto
