@@ -37,8 +37,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: appmanageradm@gmail.com
-    password: jwfmmbeospwrovmz
+    username: ${EMAIL_ADDRESS}
+    password: ${EMAIL_SECRET}
     protocol: smtp
     properties:
       mail:
@@ -62,5 +62,5 @@ server:
 
 
 jwt:
-  secret: ZzZJZVZxZ0ZxV2ZzZ0ZxZlZxZ1ZxZlZxZ3ZxZlZxZ2ZxZlZxZzZxZlZxZ0ZxZlZxZ1ZxZlZx
-  expiration: 16000
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
